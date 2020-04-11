@@ -3,7 +3,7 @@ title: Scope This
 tagline: I was just thinking
 url: https://scopethis.github.io
 paginate: 1
-baseurl: '/'
+baseurl: https://scopethis.github.io/
 
 permalink: pretty
 
