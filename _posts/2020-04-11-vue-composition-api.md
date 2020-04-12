@@ -123,13 +123,13 @@ There's a popular pattern within the Vue community that's commonly used to help 
 
 ```html
 <!--
-A short of example of how renderless components work.
-Wrap your list in the renderless-component wrapper
-(which does nothing visually) to receieve a response
-from the server.
+An example of how renderless components 
+work. Wrap your list in the 
+renderless-component wrapper to receieve 
+a response from the server.
 
-Using scoped slots, the todos are provided by the
-renderless component
+The todos are provided by the
+renderless component via scoped slots
 -->
 
 <template>
@@ -137,7 +137,9 @@ renderless component
     <renderless-component 
       service="https://api.todos.com">
         <template :slot-scope="{todos}">
-          <li v-for="(todo, key) in todos"></li>
+          <li v-for="(todo) in todos">
+            {% raw %}{{todo.label}}{% endraw %}
+          </li>
         </template>
     </renderless-component>
   </ul>
@@ -163,9 +165,11 @@ Douglas Crockford popularised the idea of a Module Pattern that promotes code en
 
 
 ```javascript
+// Greeter.js
+
 // Prepare a function that closes and
-// maintains its scope as well as providing
-// and hiding functionality
+// maintains its scope as well 
+// as providing and hiding functionality
 
 function Greeter () {
   // Not visible externally
@@ -199,8 +203,7 @@ export {
 ```
 
 ```javascript
-import {Greeter} from './the-greeter-above'
-
+import {Greeter} from './Greeter.js'
 const myGreeter = Greeter()
 
 console.log(myGreeter.greet('Joseph'))
@@ -213,6 +216,8 @@ console.log(myGreeter.aGreeting)
 The Composition API lets you use the Module Pattern to provide logic and features to components in a way that is not so tightly coupled to the framework in the way a Renderless Component is. So if we were to redo our tiny list of todos, we might choose to do it like this instead ...
 
 ```javascript
+// Todos.js
+
 function Todos () {
   const todos = reactive({
     results: []
@@ -245,7 +250,7 @@ export {
 ```html
 <template>
   <ul>
-    <li v-for="(todo, key) in todos.results">
+    <li v-for="(todo) in todos.results">
       {% raw %}{{todo.title}}{% endraw %}
       <!-- Add checkbox here -->
     </li>
@@ -254,7 +259,7 @@ export {
 ```
 
 ```javascript
-import Todos from './the-file-above'
+import Todos from './Todos.js'
 
 export default {
   setup () {

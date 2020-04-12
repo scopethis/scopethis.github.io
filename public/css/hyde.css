@@ -54,7 +54,6 @@ html {
  */
 
 .sidebar {
-  text-align: center;
   padding: 2rem 1rem;
   color: rgba(255,255,255,.5);
   background-color: #202020;
@@ -80,7 +79,13 @@ html {
   color: #fff;
   margin-top: 0;
   font-family: "Abril Fatface", serif;
-  font-size: 3.25rem;
+  /* font-size: 3.25rem; */
+  font-size: 2em;
+  width: 20%;
+}
+
+.sidebar-about .lead {
+  line-height: 1.2;
 }
 
 /* Sidebar nav */
