@@ -5,7 +5,7 @@ description: 'Ideas about learning,
 writing and understanding Web Development.'
 url: https://scopethis.github.io
 paginate: 1
-baseurl: https://scopethis.github.io/
+baseurl: '/'
 
 permalink: pretty
 
