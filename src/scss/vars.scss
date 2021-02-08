@@ -1,0 +1,22 @@
+$baseColour: #fad0e3;
+
+@mixin heading() {
+    padding: 35px;
+    padding-bottom: 0;
+}
+
+@mixin headingWrapper() {
+    padding-bottom: 25px;
+    width: 350px;
+}
+
+@mixin headingTitle() {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 600;
+}
+
+@mixin headingSubtitle() {
+    font-size: 16px;
+    color: #07622e;
+}

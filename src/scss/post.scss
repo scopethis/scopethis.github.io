@@ -1,0 +1,31 @@
+.post {
+    background-color: #ffffff;
+    -webkit-box-shadow: 5px 7px 18px -6px rgba(0,0,0,0.75);
+    -moz-box-shadow: 5px 7px 18px -6px rgba(0,0,0,0.75);
+    box-shadow: 5px 7px 18px -6px rgba(0,0,0,0.75);
+}
+
+.latest-posts {
+    list-style: none;
+    a {
+        color: darken($baseColour, 25%);
+        text-decoration: none;
+        span {
+            border-bottom: 1px dotted darken($baseColour, 25%);
+        }
+    }
+}
+
+.latest-posts-article:nth-child(odd) {
+    [class*="heading"],
+    [class*="content"] {
+        background-color: #ffffff;
+    }
+}
+
+.latest-posts-article:nth-child(even) {
+    [class*="heading"],
+    [class*="content"] {
+        background-color: lighten($baseColour, 8%);
+    }
+}

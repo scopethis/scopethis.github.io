@@ -1,0 +1,26 @@
+.content {
+    @media (min-width: 700px){
+        position: absolute;
+        left: 380px;
+        right: 0;
+    }
+}
+
+.main-nav {
+    position: absolute;
+    left: 300px;
+    top: 46px;
+
+    @media (min-width: 700px){
+        position: fixed;
+    }
+
+    a {
+        text-decoration: none;
+        color: #fff;
+
+        span {
+            border-bottom: 1px solid #fff;
+        }
+    }
+}

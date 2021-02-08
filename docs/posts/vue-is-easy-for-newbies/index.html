@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+        <title>Why I think VueJS is easy for new devs to pick up Scope This</title>
+        <meta name="description" content="">
+        <link rel="stylesheet" href="/assets/css/main.css" >
+        <script src="/assets/js/prism.js"></script>
+    </head>
+    <body>
+        <div class="wrapper">
+            <div class="profile">
+                
+<div class="profile-heading">
+    <div class="profile-heading__wrapper">
+        <h2 class="profile-heading__title"><a href="/">Simon Hamilton</a></h2>
+        <p class="profile-heading__subtitle">Senior UI Engineer</p>
+        
+    </div>
+</div>
+
+<div class="profile-description">
+    <div class="profile-description__wrapper">
+            <p class="profile-description__content">
+            <span class="experience">A versatile Senior UI Engineer with 10+ years experience</span>
+            <span class="overview">and a strong technical overview</span>
+            <span class="process">of both the Development and Design process.</span>
+        </p>
+    </div>
+</div>
+
+                
+
+<div class="profile-role">
+    <div class="profile-role_wrapper">
+        <div class="profile-status__long">
+            <p class="part-1">
+                My focus is on building products for the web, or building products
+                using web technologies.
+            </p>
+        </div>
+    </div>
+</div>
+
+            </div>
+
+            <nav class="main-nav">
+                <a href="/posts"><span>Posts</span></a>
+            </nav>
+
+            <div class="content">
+                
+<div class="post">
+    <div class="post-heading">
+        <div class="post-heading__wrapper">
+            <p class="post-heading__subtitle">February 5, 2021</p>
+            <h2 class="post-heading__title">Why I think VueJS is easy for new devs to pick up</h2>
+            <p><a href="/posts/vue" class="post-heading__tag">vue</a></p>
+        </div>
+    </div>
+    <div class="post-content">
+        <div class="post-content__wrapper">
+        <p>Setting aside the surrounding ecosystem of Vue and the numerous ways you can now compile code, I think the main reason why Vue has been so popular for developers is the speed at which you can become confident with what you've written.</p>
+<p>This is down to the structured way you write code inside a component. With Vue, there are no doubts about where things belong, and you can quickly put something together without too much trouble.</p>
+<p>There are two things that make it easy to pick up</p>
+<h2>Code placement within a component</h2>
+<p>A Vue component is a combination of HTML, Javascript and CSS all in one file. Sometimes a component can be written in a stand alone file called a Single File Component, which has a <em>.vue</em> extension. The code for the file is divided up into 3 main segments representing HTML, Javascript and CSS.</p>
+<pre><code class="language-html">&lt;template&gt;
+    &lt;p&gt;{{firstName}}&lt;/p&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+    ...
+    props: {
+      firstName: {
+        type: String,
+        required: true
+      }
+    }
+    ...
+}
+&lt;/script&gt;
+
+&lt;style&gt;
+    p {
+        color: blue;
+    }
+&lt;/style&gt;
+</code></pre>
+<p>There is no ambiguity about where code should go. It's self documenting.</p>
+<h2>Code placement within the sript block</h2>
+<p>Ambiguity is also averted within the script block. Vue makes it clear where code should live. It gives us objects to hold code that will be executed in a certain way and at a certain time. The four main parts that get used the most are:</p>
+<h3>1. Props</h3>
+<p><strong>An object</strong> that defines the properties the component should be given. These properties can be listed as optional.</p>
+<pre><code class="language-javascript">export default {
+    ...
+    props: {
+      firstName: {
+        type: String,
+        required: true
+      }
+    }
+    ...
+}
+</code></pre>
+<h3>2. Mounted</h3>
+<p><strong>A function</strong> that's called when the component has been added to the DOM.</p>
+<pre><code class="language-javascript">export default {
+    ...
+    mounted () {
+        console.log('Hello world! Can you see me?')
+        // Execute other code that can only
+        // be run when the component is &quot;loaded&quot;
+    }
+    ...
+}
+</code></pre>
+<h3>3 Computed</h3>
+<p><strong>An object</strong> that defines properties that are a combination of other properties.</p>
+<pre><code class="language-javascript">export default {
+    ...
+    computed: {
+        fullName () {
+          // update the greeting when
+          // the name changes
+          return `${this.firstName} ${this.lastName}`
+        }
+    },
+    ...
+}
+</code></pre>
+<h3>4 Methods</h3>
+<p><strong>An object</strong> that defines custom functions that can be used within the component.</p>
+<pre><code class="language-javascript">export default {
+    ...
+    methods: {
+        getGreeting(greeting) {
+            return `${greeting} ${this.fullName}`
+        }
+    }
+    ...
+}
+</code></pre>
+<p>You can find an example like this on the VueJs website. However I think it's worth noting, as when you open a component file, it's relatively easy to get your bearings quickly. This makes it great for new devs who have never used Vue before. I should also add that this does complicate things, the more functionality you add.</p>
+<p>Your code placement options might seem a little restrictive to start with, but this restraint really allows you to think about your component instead of the framework.</p>
+
+        </div>
+    </div>
+
+</div>
+
+            </div>
+        </div>
+    </body>
+</html>

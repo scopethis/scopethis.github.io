@@ -1,0 +1,46 @@
+.post-heading {
+    @include heading();
+}
+
+.post-heading__wrapper {
+    @include headingWrapper();
+    width: 100%;
+    max-width: 550px;
+}
+
+.post-content__wrapper {
+    @include headingWrapper();
+    width: 100%;
+    max-width: 550px;
+}
+
+.post-heading__title {
+    @include headingTitle();
+    margin-bottom: 10px;
+    color: darken($baseColour, 25%);
+}
+
+.post-heading__subtitle {
+    @include headingSubtitle();
+    margin-bottom: 10px;
+    color: darken($baseColour, 25%);
+}
+
+.post-heading__tag {
+    // padding: 5px;
+    padding-bottom: 5px;
+    // padding-right: 10px;
+    // background: darken($baseColour, 25%);
+    // border-radius: 4px;
+    color: darken($baseColour, 25%);
+    font-weight: bold;
+    display: inline-block;
+    margin-right: 5px;
+    font-size: 12px;
+    border-bottom: 3px solid darken($baseColour, 25%);
+    text-decoration: none;
+    a {
+        text-decoration: none;
+    }
+}
+

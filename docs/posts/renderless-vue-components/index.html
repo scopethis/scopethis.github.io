@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+        <title>I&#39;m not so sure about Renderless Components Scope This</title>
+        <meta name="description" content="">
+        <link rel="stylesheet" href="/assets/css/main.css" >
+        <script src="/assets/js/prism.js"></script>
+    </head>
+    <body>
+        <div class="wrapper">
+            <div class="profile">
+                
+<div class="profile-heading">
+    <div class="profile-heading__wrapper">
+        <h2 class="profile-heading__title"><a href="/">Simon Hamilton</a></h2>
+        <p class="profile-heading__subtitle">Senior UI Engineer</p>
+        
+    </div>
+</div>
+
+<div class="profile-description">
+    <div class="profile-description__wrapper">
+            <p class="profile-description__content">
+            <span class="experience">A versatile Senior UI Engineer with 10+ years experience</span>
+            <span class="overview">and a strong technical overview</span>
+            <span class="process">of both the Development and Design process.</span>
+        </p>
+    </div>
+</div>
+
+                
+
+<div class="profile-role">
+    <div class="profile-role_wrapper">
+        <div class="profile-status__long">
+            <p class="part-1">
+                My focus is on building products for the web, or building products
+                using web technologies.
+            </p>
+        </div>
+    </div>
+</div>
+
+            </div>
+
+            <nav class="main-nav">
+                <a href="/posts"><span>Posts</span></a>
+            </nav>
+
+            <div class="content">
+                
+<div class="post">
+    <div class="post-heading">
+        <div class="post-heading__wrapper">
+            <p class="post-heading__subtitle">February 8, 2021</p>
+            <h2 class="post-heading__title">I&#39;m not so sure about Renderless Components</h2>
+            <p><a href="/posts/vue" class="post-heading__tag">vue</a></p>
+        </div>
+    </div>
+    <div class="post-content">
+        <div class="post-content__wrapper">
+        <p>There is a popular pattern within the Vue community that's commonly used to help write components that rely on data to build a set of results. They're called <strong>Renderless Components</strong>. These are Vue components that don't render anything directly to the browser. Instead, they behave like a service that provides UI functionality or data.</p>
+<pre><code class="language-html">&lt;!--
+An example of how renderless components 
+work. Wrap your list in the 
+renderless-component wrapper to receieve 
+a response from the server.
+
+The todos are provided by the
+renderless component via scoped slots
+--&gt;
+
+&lt;template&gt;
+  &lt;ul&gt;
+    &lt;renderless-component 
+      service=&quot;https://api.todos.com&quot;&gt;
+        &lt;template :slot-scope=&quot;{todos}&quot;&gt;
+          &lt;li v-for=&quot;(todo) in todos&quot;&gt;
+            {{todo.label}}
+          &lt;/li&gt;
+        &lt;/template&gt;
+    &lt;/renderless-component&gt;
+  &lt;/ul&gt;
+&lt;/template&gt;
+</code></pre>
+<p>I think this is an <strong>Anti Pattern</strong> and I have a few issues with it.</p>
+<ol>
+<li>You're adding Markup to the template. That (visually) increases the complexity of the template.</li>
+<li>Logic tightly coupled to the template portion of your component makes that logic unusable for <strong>non-Vue</strong> parts of your app.</li>
+<li>Accessing methods/variables on your Renderless Component becomes a bit cumbersome (or you don't provide any).</li>
+</ol>
+<p>Most anti-patterns are born out of necessity and the real need here, with Renderless Components, is to <strong>make the logic reuseable but keep the connection to Vue's lifecycle hooks and the reactivity model</strong>.</p>
+<p>Why can't this be done with standard javascript? What does this add that doing it the normal way doesn't?</p>
+<pre><code class="language-html">&lt;template&gt;
+  &lt;ul&gt;
+    &lt;!-- simpler markup --&gt;
+    &lt;li v-for=&quot;(todo) in todos&quot;&gt;
+        {{todo.label}}
+    &lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+    data () {
+        return {
+            todos: []
+        }
+    },
+
+    methods: {
+        getTodos() {
+            ... // Some ajax/endpoint magic
+            .then(response =&gt; {
+                this.todos = response
+            })
+            ...
+        }
+    }
+}
+&lt;/script&gt;
+</code></pre>
+<p>If you wanted to reuse the service call in another component, it's now trivial to move the getTodos call into a standard javascript module. That same module could be used by another completely  different framework if needed.</p>
+<pre><code class="language-javascript">// todo-service.js
+export const getTodos = () =&gt; {
+    ... // Some ajax/endpoint magic
+    .then(response =&gt; {
+        resolve(response)
+    })
+    ...
+}
+</code></pre>
+<pre><code class="language-javascript">// Your todo app/component
+import {getTodos} from 'todo-service'
+export default {
+    ...
+    methods: {
+        getData = async () =&gt; {
+            this.todos = await getTodos();
+        }
+    }
+    ...
+}
+</code></pre>
+<p>This makes more sense to me, and seems more future proof.</p>
+<p>Lets try and keep templates as dumb as possible. Sticking to the basics should keep your template dumb and ultimately maintainable:</p>
+<ol>
+<li>Simple data binding</li>
+<li>Standard Loops</li>
+<li>Events</li>
+</ol>
+
+        </div>
+    </div>
+
+</div>
+
+            </div>
+        </div>
+    </body>
+</html>

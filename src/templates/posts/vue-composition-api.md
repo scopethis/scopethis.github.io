@@ -1,8 +1,11 @@
 ---
 layout: post
+date: 2019-11-13
 title:  "A quick look at the new Vue JS Composition API"
-tags: javascript modules
+tags: ['vue']
+excerpt: "Those of you that use Vue, know that writing a single file component can be a very structured process, methods and variables must be written in specific, known, places ..."
 ---
+## Vue
 
 Those of you that use Vue, know that writing a single file component can be a very structured process, methods and variables must be written in specific, known, places. This is part of Vue's charm, in that it can be picked up quickly by newcomers.
 
@@ -147,7 +150,7 @@ renderless component via scoped slots
 
 I have a couple of issues with this pattern:
 
-1. You're adding Markup to the template. That (visually)increases the complexity of the template.
+1. You're adding Markup to the template. That (visually) increases the complexity of the template.
 2. Abstract logic tied to Vue's framework, which makes it unusable for **non-Vue** parts of your app.
 3. Accessing methods/variables on your Renderless Component becomes a bit cumbersome (or you don't provide any).
 

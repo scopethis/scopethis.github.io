@@ -1,0 +1,18 @@
+---
+layout: base.njk
+---
+
+{# {{pagination.items | console}} #}
+{# <ol>
+{% for page in pagination.items | reverse %}
+  <li><a href="{{page.url}}">{{ page.url }}</a></li>
+{% endfor %}
+</ol> #}
+
+<ul class="latest-posts">
+{% for post in pagination.items %}
+  <li class="latest-posts-article">
+    {% include "partials/post-snippet.njk" %}
+  </li>
+{% endfor %}
+</ul>
