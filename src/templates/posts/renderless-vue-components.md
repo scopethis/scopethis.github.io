@@ -64,7 +64,7 @@ export default {
 
     methods: {
         getTodos() {
-            ... // Some ajax/endpoint magic
+            ... // Some Promise/ajax/endpoint magic
             .then(response => {
                 this.todos = response
             })
@@ -80,7 +80,7 @@ If you wanted to reuse the service call in another component, it's now trivial t
 ```javascript
 // todo-service.js
 export const getTodos = () => {
-    ... // Some ajax/endpoint magic
+    ... // Some Promise/ajax/endpoint magic
     .then(response => {
         resolve(response)
     })

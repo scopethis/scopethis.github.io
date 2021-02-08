@@ -40,7 +40,7 @@ export default {
 ```
 There is no ambiguity about where code should go. It's self documenting.
 
-## Code placement within the sript block
+## Code placement within the script block
 
 Ambiguity is also averted within the script block. Vue makes it clear where code should live. It gives us objects to hold code that will be executed in a certain way and at a certain time. The four main parts that get used the most are:
 
@@ -100,6 +100,6 @@ export default {
     ...
 }
 ```
-You can find an example like this on the VueJs website. However I think it's worth noting, as when you open a component file, it's relatively easy to get your bearings quickly. This makes it great for new devs who have never used Vue before. I should also add that this does complicate things, the more functionality you add.
+You can find an example like this on the VueJs website. However I think it's worth noting, as when you open a component file, it's relatively easy to get your bearings quickly. This makes it great for new devs who have never used Vue before. It goes without saying that the more functionality you add, the more complex things get.
 
 Your code placement options might seem a little restrictive to start with, but this restraint really allows you to think about your component instead of the framework. 
