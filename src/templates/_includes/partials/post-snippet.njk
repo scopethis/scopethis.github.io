@@ -2,7 +2,7 @@
         <div class="post-heading__wrapper">
             <p class="post-heading__subtitle">{{ post.date.toLocaleDateString(
                 "en-US", {year: 'numeric', month: 'long', day: 'numeric'}) }}</p>
-            <h2 class="post-heading__title">{{post.data.title}}</h2>
+            <h2 class="post-heading__title"><a href="{{post.url}}">{{post.data.title}}</a></h2>
             <p>
             {%- for tag in post.data.tags -%}
                 <a href="/posts/{{ tag }}" class="post-heading__tag">{{ tag }}</a>
@@ -13,6 +13,5 @@
     <div class="post-content">
         <div class="post-content__wrapper">
             <p>{{post.data.excerpt }}</p>
-            <p><a href="{{post.url}}"><span>Read this</span></a></p>
         </div>
     </div>

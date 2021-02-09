@@ -2,7 +2,7 @@
 layout: post.njk
 date: 2020-04-12
 title:  "Explaining functions to a ten year old"
-tags: ['javascript']
+tags: ['lockdown']
 excerpt: "During the Corona virus lockdown I thought it might be a good idea to show my daughter what I do all day at work ..."
 ---
 

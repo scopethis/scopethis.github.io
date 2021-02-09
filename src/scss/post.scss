@@ -26,6 +26,6 @@
 .latest-posts-article:nth-child(even) {
     [class*="heading"],
     [class*="content"] {
-        background-color: lighten($baseColour, 8%);
+        background-color: lighten($baseColour, 30%);
     }
 }

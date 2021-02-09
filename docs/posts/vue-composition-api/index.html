@@ -62,7 +62,7 @@
     <div class="post-content">
         <div class="post-content__wrapper">
         <h2>Vue</h2>
-<p>Those of you that use Vue, know that writing a single file component can be a very structured process, methods and variables must be written in specific, known, places. This is part of Vue's charm, in that it can be picked up quickly by newcomers.</p>
+<p>Those of you that use Vue, know that writing a single file component can be a very structured process. Methods and variables must be written in specific, known, places. This is part of Vue's charm, in that it can be picked up quickly by newcomers.</p>
 <pre><code class="language-html">&lt;template&gt;
     &lt;span&gt;{{greeting}}&lt;/span&gt;
 &lt;/template&gt;
@@ -90,28 +90,29 @@ export default {
         greeting () {
           // update the greeting when
           // the name changes
-          return `Hello ${name}`
+          return `Hello ${this.name}`
         }
     },
 
     methods: {
-        sayGoodbye (input) {
-            return `Goodbye ${name}`
+        sayGoodbye () {
+            return `Goodbye ${this.name}`
         }
     }
 }
 </code></pre>
-<p>The sections provided, such as <strong>computed</strong>, <strong>method</strong> and <strong>watch</strong> are excellent entry points when starting to write code in Vue. But that code can become hard to follow.</p>
+<p>The <strong>computed</strong>, <strong>method</strong> and <strong>watch</strong> sections are great entry points when starting to write code in Vue. But, overtime, that code can become hard to follow.</p>
 <blockquote></blockquote>
-<p>Your overall logic is grouped by your use of Vue's computed, methods and watch sections, instead of the functionality of your component.</p>
-<p>Consider the size of the above code if(when) feature updates go unchecked.</p>
-<p>When components get bigger they become more difficult to maintain, because part of the logic gets &quot;lost&quot; within the <strong>computed</strong>, <strong>method</strong> and <strong>watch</strong> sections.<br>
-We generally stick to this process because of how Vue handles  <a href="https://vuejs.org/v2/guide/instance.html#Instance-Lifecycle-Hooks">the component lifecycle</a>  and how Vue binds itself to the Document Object Model (the object that represents HTML markup in a browser).</p>
-<p>To avoid the lost logic problem, we tend to move code, or features, into other components to group the functionality. As a result, this makes the code easier to follow ...</p>
+<p>This is because your logic is grouped by the computed, methods and watch sections, instead of the functionality of your component.</p>
+<p>Consider the potential size of the above code if functionality updates went unchecked.</p>
+<p>When components get big they become more difficult to maintain, because part of the logic gets &quot;lost&quot; within the <strong>computed</strong>, <strong>methods</strong> and <strong>watch</strong> sections.</p>
+<p>There is a great image on the Vue website that <a href="https://v3.vuejs.org/guide/composition-api-introduction.html">tries to visualise the problem</a>.</p>
+<p>However, we generally stick to this process because of how Vue builds a component.</p>
+<p>To avoid the lost logic problem, we could move code into other components to group the functionality. Doing this makes the code easier to follow ...</p>
 <div markdown="1" class="code-container">
   <div markdown="1" class="code-of2">
-<pre><code class="language-javascript">// Focus ALL code here
-// on Feature A
+<pre><code class="language-javascript">// Write ALL Feature A code within
+// the feature-a.js file
 export default {
   watch: {
     attributeA (input) {
@@ -135,8 +136,8 @@ export default {
 </code></pre>
   </div>
   <div markdown="1" class="code-of2">
-<pre><code class="language-javascript">// Focus ALL code here
-// on Feature B
+<pre><code class="language-javascript">// Write ALL Feature B code within
+// the feature-b.js file
 export default {
   watch: {
     attributeB (input) {
@@ -160,44 +161,12 @@ export default {
 </code></pre>
   </div>
 </div>
-<p>... but this can become more complex and <strong>coupled</strong> to Vue  when taken to extremes.</p>
-<h2>Anti-pattern</h2>
-<p>There's a popular pattern within the Vue community that's commonly used to help write components that rely on data to build a set of results. They're called <strong>Renderless Components</strong>. These are Vue components that don't render anything directly to the browser. Instead, they behave like a service that provides UI functionality or data.</p>
-<pre><code class="language-html">&lt;!--
-An example of how renderless components 
-work. Wrap your list in the 
-renderless-component wrapper to receieve 
-a response from the server.
-
-The todos are provided by the
-renderless component via scoped slots
---&gt;
-
-&lt;template&gt;
-  &lt;ul&gt;
-    &lt;renderless-component 
-      service=&quot;https://api.todos.com&quot;&gt;
-        &lt;template :slot-scope=&quot;{todos}&quot;&gt;
-          &lt;li v-for=&quot;(todo) in todos&quot;&gt;
-            {{todo.label}}
-          &lt;/li&gt;
-        &lt;/template&gt;
-    &lt;/renderless-component&gt;
-  &lt;/ul&gt;
-&lt;/template&gt;
-</code></pre>
-<p>I have a couple of issues with this pattern:</p>
-<ol>
-<li>You're adding Markup to the template. That (visually) increases the complexity of the template.</li>
-<li>Abstract logic tied to Vue's framework, which makes it unusable for <strong>non-Vue</strong> parts of your app.</li>
-<li>Accessing methods/variables on your Renderless Component becomes a bit cumbersome (or you don't provide any).</li>
-</ol>
-<p>Most anti-patterns are born out of necessity and the real need here, with Renderless Components, is to <strong>extract the logic but keep the connection to Vue's lifecycle hooks and the reactivity model</strong>.</p>
+<p>... but this can also become more complex and <strong>too coupled to the framework, because the code is still bound to the component style syntax</strong>. VueX won't help here either, because it's not a state management issue. It's an organisation issue.</p>
 <h2>A New Way</h2>
 <p>This is precisely what the new Composition API is for - handling features and functionality in a maintainable way, while keeping the connection to Vue. At its core, the Composition API is an explicit approach to use when constructing large products. However, I think its real purpose is to encourage developers to think much further ahead, with modularity in mind.</p>
-<p>Its use is optional, so developers can choose the appropriate moment to apply the approach. It's modular and can be used outside of the Vue framework. The plugin for version 2.x makes the approach backwards compatible, so legacy code can be refactored over time.</p>
-<p>However, what got me excited about using it, for me at least, was that it goes back to basics in terms of defining how modular reusable code could be written and used within Vue.</p>
-<p>Douglas Crockford popularised the idea of a Module Pattern that promotes code encapsulation. Code with relatively private and publicly accessible functionality. Addy Osmani covered this and the Revealing Module Pattern in his book Learning Javascript Design patterns. In its most basic form, the pattern is pretty simple: A function that returns an object exposing variables and methods.</p>
+<p>Its use is optional, so developers can choose the appropriate moment to apply the approach. It's modular and can be used outside the Vue framework. The plugin for version 2.x makes the approach backwards compatible, so legacy code can be refactored over time.</p>
+<p>However, what got me excited about using it, was that it goes back to basics in terms of defining how modular reusable code could be written and used within Vue.</p>
+<p>Douglas Crockford popularised the idea of a Module Pattern that promotes code encapsulation. Code with relatively private and publicly accessible functionality. Addy Osmani covered this and the Revealing Module Pattern in his book Learning Javascript Design Patterns. In its most basic form, the pattern is pretty simple: A function that returns an object exposing variables and methods.</p>
 <pre><code class="language-javascript">// Greeter.js
 
 // Prepare a function that closes and
@@ -243,24 +212,24 @@ console.log(myGreeter.greet('Joseph'))
 console.log(myGreeter.aGreeting)
 // Logs 'undefined'
 </code></pre>
-<p>The Composition API lets you use the Module Pattern to provide logic and features to components in a way that is not so tightly coupled to the framework in the way a Renderless Component is. So if we were to redo our tiny list of todos, we might choose to do it like this instead ...</p>
+<p>The Composition API lets you use the Module Pattern to provide logic and features to components in a way that is not so tightly coupled to the framework in the way a Renderless Component is.</p>
+<p>So if we were to build a tiny list of todos, we might choose to do it like this.</p>
+<ol>
+<li>Create a module to handle fetching the data</li>
+</ol>
 <pre><code class="language-javascript">// Todos.js
 
 function Todos () {
   const todos = reactive({
-    results: []
+    list: []
   })
   
   funtion getTodos() {
     // an ajax call to get
     // your todos.
-
-    // Could also wrap this in a promise
-    // and 'resolve' it
-    // to make it useful elsewhere
     http.get('https://api.todos.com')
       .then(response =&gt; {
-        todos.results = response
+        todos.list = response
     })
   }
   
@@ -274,16 +243,20 @@ export {
   Todos
 }
 </code></pre>
+<ol start="2">
+<li>Then use the module inside your component</li>
+</ol>
 <pre><code class="language-html">&lt;template&gt;
   &lt;ul&gt;
-    &lt;li v-for=&quot;(todo) in todos.results&quot;&gt;
+    &lt;li v-for=&quot;(todo) in todos.list&quot;&gt;
       {{todo.title}}
       &lt;!-- Add checkbox here --&gt;
     &lt;/li&gt;
   &lt;/ul&gt;
 &lt;/template&gt;
-</code></pre>
-<pre><code class="language-javascript">import Todos from './Todos.js'
+
+&lt;script&gt;
+import Todos from './Todos.js'
 
 export default {
   setup () {
@@ -297,20 +270,22 @@ export default {
     }
   }
 }
+&lt;/script&gt;
 </code></pre>
-<p>For me, this is much more logical than using a Renderless Component. The template is much clearer and only contains rendering logic. In addition, the Todo module can be reused outside the Vue component ecosystem if required.</p>
+<p>For me, this is easier than using a Renderless Component. The template is much clearer and only contains rendering logic. In addition, the Todo module can be reused outside the Vue component ecosystem if required.</p>
 <blockquote></blockquote>
-<p>It's worth remembering that you can still use a module pattern to provide functionality for Vue components, you'd just need to jump through a few hoops if you wish to apply it to template bindings / reactivity model.</p>
+<p>It's worth remembering that you can still use a module pattern to provide functionality for Vue components, you'd just need to jump through a few hoops if you wish to keep the data bindings / reactivity model.</p>
 <h2>VueX?</h2>
-<p>This is possible because the Composition API is bundled with optional binding functionality. I say optional because it would be a regular module without the ability to update a template automatically. The sample code above used a <strong>reactive</strong> function as part of the todo list storage.</p>
+<p>The sample code above used a <strong>reactive</strong> function as part of the todo list storage.</p>
 <pre><code class="language-javascript">  const todos = reactive({
     results: []
   })
 </code></pre>
-<p>This helps the template(html) automatically bind itself to any changes to the result. And with the help of <strong>provide</strong> and <strong>inject</strong>, you can bind that same result property to <strong>any</strong> html within you app.</p>
-<p>So, where does this leave VueX? Honest answer is, I don't know. I've always thought it was a lot of work for not very much, so I'm glad to see another option available to developers.</p>
+<p>This helps the template automatically bind itself to any changes in the list. With the help of <strong>provide</strong> and <strong>inject</strong>, you can bind that same list property to <strong>any</strong> vue compoent within your app.</p>
+<p>So where does this leave VueX? Honest answer is, I don't know. I've always thought VueX was a lot of work for not very much, so I'm glad to see another option available to developers.</p>
 <h2>So ...</h2>
-<p>I've been using the Composition API for a while now and can see improvements to how I think about building a Vue App. When you get so embedded within a frameworks opinionated style of development, it's very easy to forget older, tried and tested, ways of working. I'm hoping The Composition API reminds me of a few other things I've forgotten along the way.</p>
+<p>I've been using the Composition API for a while now and can see improvements to how I think about building a Vue App. When you get so embedded within a frameworks opinionated style of development, it's very easy to forget older, tried and tested, ways of working.</p>
+<p>I'm hoping The Composition API reminds me of a few other things I've forgotten along the way.</p>
 
         </div>
     </div>
