@@ -42,6 +42,24 @@ module.exports = (config) => {
             .reverse()
     );
 
+    config.addCollection("lockdown", (collection) =>
+        collection
+            .getAllSorted()
+            .filter((item) => {
+                const isPost =
+                    item.url &&
+                    !item.inputPath.includes("index.njk") &&
+                    item.data.tags &&
+                    item.data.page.date &&
+                    item.data.tags.includes("lockdown") &&
+                    item.inputPath.startsWith("./src/templates/posts/");
+                if (isPost) {
+                    return item;
+                }
+            })
+            .reverse()
+    );
+
     config.addCollection("latest", (collection) =>
         collection
             .getAllSorted()
