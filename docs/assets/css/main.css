@@ -439,7 +439,7 @@ pre[class*="language-"] {
 .post-content li::marker {
   font-size: 30px;
   font-style: italic;
-  color: #401a00;
+  color: #ff710d;
   font-family: 'Cormorant Garamond', serif;
 }
 
