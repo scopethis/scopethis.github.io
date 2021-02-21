@@ -1,11 +1,38 @@
 const util = require("util");
-// 11ty configuration
+
+const collections = [
+    { name: "vue", dir: "posts" },
+    { name: "lockdown", dir: "posts" },
+    { name: "haiku", dir: "posts" },
+    { name: "work", dir: "work" },
+];
+
 module.exports = (config) => {
     config.addPassthroughCopy("assets");
 
-   config.addFilter("console", function (value) {
-       return util.inspect(value);
-   });
+    config.addFilter("console", function (value) {
+        return util.inspect(value);
+    });
+
+    collections.forEach((grouping) => {
+        config.addCollection(grouping.name, (collection) =>
+            collection
+                .getAllSorted()
+                .filter((item) => {
+                    const isPost =
+                        item.url &&
+                        !item.inputPath.includes("index.njk") &&
+                        item.data.tags &&
+                        item.data.tags.includes(`${grouping.name}`) &&
+                        item.data.page.date &&
+                        item.inputPath.startsWith(`./src/templates/${grouping.dir}/`);
+                    if (isPost) {
+                        return item;
+                    }
+                })
+                .reverse()
+        );
+    })
 
     config.addCollection("posts", (collection) =>
         collection
@@ -17,78 +44,6 @@ module.exports = (config) => {
                     item.data.tags &&
                     item.data.page.date &&
                     item.inputPath.startsWith("./src/templates/posts/");
-                if (isPost) {
-                    return item;
-                }
-            })
-            .reverse()
-    );
-
-    config.addCollection("vue", (collection) =>
-        collection
-            .getAllSorted()
-            .filter((item) => {
-                const isPost =
-                    item.url &&
-                    !item.inputPath.includes("index.njk") &&
-                    item.data.tags &&
-                    item.data.page.date &&
-                    item.data.tags.includes("vue") &&
-                    item.inputPath.startsWith("./src/templates/posts/");
-                if (isPost) {
-                    return item;
-                }
-            })
-            .reverse()
-    );
-
-    config.addCollection("lockdown", (collection) =>
-        collection
-            .getAllSorted()
-            .filter((item) => {
-                const isPost =
-                    item.url &&
-                    !item.inputPath.includes("index.njk") &&
-                    item.data.tags &&
-                    item.data.page.date &&
-                    item.data.tags.includes("lockdown") &&
-                    item.inputPath.startsWith("./src/templates/posts/");
-                if (isPost) {
-                    return item;
-                }
-            })
-            .reverse()
-    );
-
-    config.addCollection("latest", (collection) =>
-        collection
-            .getAllSorted()
-            .filter(
-                (item) => {
-                    const isPost =
-                        item.url &&
-                        !item.inputPath.includes("index.njk") &&
-                        item.data.tags &&
-                        item.data.page.date &&
-                        item.inputPath.startsWith("./src/templates/posts/");
-                    if (isPost) {
-                        return item;
-                    }
-                }
-            )
-            .reverse()
-            .slice(0, 3)
-    );
-
-    config.addCollection("work", (collection) =>
-        collection
-            .getAllSorted()
-            .filter((item) => {
-                const isPost =
-                    item.url &&
-                    !item.inputPath.includes("index.njk") &&
-                    item.data.tags &&
-                    item.inputPath.startsWith("./src/templates/work/");
                 if (isPost) {
                     return item;
                 }
