@@ -1,6 +1,7 @@
 const util = require("util");
 
 const collections = [
+    { name: "general", dir: "posts" },
     { name: "vue", dir: "posts" },
     { name: "lockdown", dir: "posts" },
     { name: "haiku", dir: "posts" },
