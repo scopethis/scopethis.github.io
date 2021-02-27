@@ -58,6 +58,7 @@
     li {
         margin-bottom: 15px;
         &::marker {
+            line-height: 0;
             font-size: 30px;
             font-style: italic;
             color: darken($baseColour, 10%);

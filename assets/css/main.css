@@ -441,6 +441,7 @@ pre[class*="language-"] {
 }
 
 .post-content li::marker {
+  line-height: 0;
   font-size: 30px;
   font-style: italic;
   color: #ff710d;

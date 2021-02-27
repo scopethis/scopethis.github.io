@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+        <title>Managing text and content with Sanity Scope This</title>
+        <meta name="description" content="">
+        <link rel="stylesheet" href="/assets/css/main.css" >
+        <script src="/assets/js/prism.js"></script>
+    </head>
+    <body>
+        <div class="wrapper">
+            <div class="profile">
+                
+<div class="profile-heading">
+    <div class="profile-heading__wrapper">
+        <h2 class="profile-heading__title"><a href="/">Simon Hamilton</a></h2>
+        <p class="profile-heading__subtitle">Senior UI Engineer</p>
+        
+    </div>
+</div>
+
+<div class="profile-description">
+    <div class="profile-description__wrapper">
+            <p class="profile-description__content">
+            <span class="experience">A versatile Senior UI Engineer with 10+ years experience</span>
+            <span class="overview">and a strong technical overview</span>
+            <span class="process">of both the Development and Design process.</span>
+        </p>
+    </div>
+</div>
+
+                
+
+<div class="profile-role">
+    <div class="profile-role_wrapper">
+        <div class="profile-status__long">
+            <p class="part-1">
+                My focus is on building products for the web, or building products
+                using web technologies.
+            </p>
+        </div>
+    </div>
+</div>
+
+            </div>
+
+            <nav class="main-nav">
+                <a href="/posts"><span>Posts</span></a>
+            </nav>
+
+            <div class="content">
+                
+<div class="post">
+    <div class="post-heading">
+        <div class="post-heading__wrapper">
+            <p class="post-heading__subtitle">February 27, 2021</p>
+            <h2 class="post-heading__title">Managing text and content with Sanity</h2>
+            <p><a href="/posts/general" class="post-heading__tag">general</a></p>
+        </div>
+    </div>
+    <div class="post-content">
+        <div class="post-content__wrapper">
+        <p>I've been using <a href="https://sanity.io">sanity.io</a> for a while now, at least a year, sporadically. And while there are a ton of good things to shout about, I want to talk about <a href="https://www.sanity.io/guides/introduction-to-portable-text">Portable Text</a> and Serailizers.</p>
+<p>I'm no expert with the Sanity system yet, it's such a good system to just get going without delving too deeply when starting out, but I've recently had an <em><strong>Ah ha</strong></em> moment with Portable Text, which I'd like to share.</p>
+<p><em>These are the moments I love while learning something new - When some of the dots you've been playing with start to connect.</em></p>
+<p>I had two relatively simple issues and one complex (or so I thought).</p>
+<ol>
+<li>The first two were about links within posts that needed to be styled a certain way as well as needing some of those links to open in a new window.</li>
+<li>The third issue had to do with styling a blockquote in a particular way.</li>
+</ol>
+<blockquote>
+<p>It must be noted that I'm building a static site, which plays nicely with how Sanity works. And I must also stress that <strong>I didn't want my users to add any markup or styling to the content</strong> within Sanity Studio.</p>
+</blockquote>
+<p>All three of my issues were solved with Marks and Markdefs. A lot of my time was spent reading <a href="https://www.sanity.io/guides/portable-text-internal-and-external-links">their method of handling links</a> and about <a href="https://www.sanity.io/docs/block-content">blocks in general</a>. However my link version differs from theirs. Let me explain.</p>
+<h2>The Blockquote issue</h2>
+<h3>The problem:</h3>
+<p>Provide a way for users to add a background colour and a text colour to a blockquote within an article, without overly compromising the content.</p>
+<p><strong>The solution</strong>: Create a colour swatch document, that contains a hex for both the background and text colours.</p>
+<p>To create a reasonable exeprience for the user, I created a [react] component to help visualise the changes (I've not shown the component code for brevity):</p>
+<p><img src="https://res.cloudinary.com/dxcpo9dzb/image/upload/v1614443051/blog/sanity-swatch-plugin_mdohnh.png" alt="Sanity Component"></p>
+<p>I then updated the Colour Swatch schema to make use of the new component.</p>
+<pre><code class="language-javascript">// Swatch schema
+import Swatch from '../components/ColourSwatch'
+...
+fields: [
+  ...
+    {
+      title: 'Colours',
+      name: 'swatch',
+      type: 'object',
+      description: &quot;...&quot;,
+  --&gt; inputComponent: Swatch,
+    }
+  ...
+]
+...
+</code></pre>
+<p>All Swatches are a sanity <em>document</em>, which means they'll be treated like royalty!</p>
+<p>Next I updated the schema where the blockquote was being used, so the text field could apply the Swatch document to a highlighted section of text.</p>
+<pre><code class="language-javascript">// article schema
+...
+  name: &quot;article&quot;,
+  type: &quot;array&quot;
+  of: [
+    {
+      type: &quot;blocks&quot;,
+      marks: {
+        annotations: [
+          {
+              name: &quot;colourSwatch&quot;,
+              type: &quot;object&quot;,
+              title: &quot;Colour Swatch&quot;,
+              fields: [
+                  {
+                      name: &quot;swatchRef&quot;,
+                      type: &quot;reference&quot;,
+                      title: &quot;Colour Swatch&quot;,
+                      to: [
+                          { type: &quot;swatch&quot; },
+                      ],
+                  },
+              ],
+          }
+        ]
+      }
+    }
+  ]
+...
+</code></pre>
+<p>Now our users can create a blockquote, highlight it and apply a Swatch to it.</p>
+<p><img src="https://res.cloudinary.com/dxcpo9dzb/image/upload/v1614444280/blog/sanity-annotation_sotx3i.png" alt="Block annotation"></p>
+<p>Brilliant! But now what? Rendering this page delivers no visual changes! What did I miss?</p>
+<h2>GROQ and Serailizers to the rescue</h2>
+<p>To ensure the content is transformed correctly, we need to make sure the relevant <code>markDefs</code> get returned. To do this we have to update our query (Like GraphQL, we decide what we want returned).</p>
+<pre><code class="language-javascript">// GROQ query
+article[ ]{
+  ...
+  markDefs[ ]{
+      ...
+      &quot;colourSwatch&quot;: swatchRef-&gt;{
+          &quot;background&quot;: swatch.background,
+          &quot;text&quot;: swatch.text
+      }
+      ...
+  }
+  ...
+}
+</code></pre>
+<p>Now, by extending/creating the Serailizers, you are able to hook into the build flow of Portable Text. When the serializer encounters a blockquote, you are given access to not only the blockquote, but also the <code>props</code> and modifications applied to it.</p>
+<pre><code class="language-javascript">import renderer from &quot;@sanity/block-content-to-html&quot;;
+const h = renderer.h;
+
+export const serializers = {
+  ...
+  marks: {
+    colourSwatch: (props) =&gt; {
+        return h(
+            &quot;span&quot;, 
+            {
+                style: {
+                    'background-color': props.mark.colourSwatch.background,
+                    color: props.mark.colourSwatch.text,
+                }
+            },
+            props.children
+        );
+    }
+  }
+  ...
+}
+</code></pre>
+<p>At this point you're free to return whatever you like, but in my case I was able to use the <code>props</code> to get the applied Swatch, with colours, and return a blockquote with the correct style attached.</p>
+<h2>The Link issues.</h2>
+<p>The other two issues followed a similar pattern, however, I didn't need to create a new document. I simply asked the serializer to modify links, when it encountered them.</p>
+<pre><code class="language-javascript">import renderer from &quot;@sanity/block-content-to-html&quot;;
+const h = renderer.h;
+
+export const serializers = {
+  ...
+  marks: {
+    link: (props) =&gt; {
+      // handle internal/external links
+      const href = props.mark.href
+      const target = (href &amp;&amp; href.indexOf('mydomain.') &gt; -1)
+          ? &quot;_self&quot;
+          :&quot;_blank&quot;;
+
+      // Insert the &lt;span&gt; tag
+      return h(
+        &quot;a&quot;,
+        { href, target },
+        h(
+          &quot;span&quot;,
+          null,
+          props.children
+        )
+      )
+    }
+  }
+  ...
+}
+</code></pre>
+<p>Again, I am given access to the link element and I'm allowed to return whatever I like. In this instance I am adding a <code>&lt;span&gt;</code> tag as a child of the <code>&lt;a&gt;</code> tag. In addition to this, I am also checking the actual link to see if it's an external or internal link and updating the target attribute.</p>
+<h2>Final thoughts</h2>
+<p>As I'm building a static site, this is incredibly valuable, because normally you would do all of this dynamically, when the page is requested. As it stands I have pre rendered html pages, with correctly formatted links and correctly styled blockquotes. All without seriously crippling the core content, or even modifying the template.</p>
+<p>I admit, this is a very quick overview and I've glossed over a few areas. But understanding Portable text is key to doing great things with this Headless CMS.</p>
+<p>Thanks Sanity.</p>
+
+        </div>
+    </div>
+
+</div>
+
+            </div>
+        </div>
+    </body>
+</html>
