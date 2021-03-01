@@ -1,5 +1,5 @@
 ---
-title: Haiku
+title: General
 layout: collection.njk
 # When using pagination, remember that
 # the size refers to the number of items on 
